@@ -14,7 +14,6 @@ class CertificateSystem {
     private static $instance = null;
     private $config;
     
-    // Prevenir instanciación directa
     private function __construct() {
         $this->init_config();
         $this->init_hooks();
@@ -58,7 +57,6 @@ class CertificateSystem {
         register_activation_hook(__FILE__, [$this, 'activate_plugin']);
         add_action('init', [$this, 'init_directories']);
         add_action('admin_menu', [$this, 'add_admin_menu']);
-        // Agregar un cron job para la generación automática
         if (!wp_next_scheduled('generate_pending_certificates')) {
             wp_schedule_event(time(), 'hourly', 'generate_pending_certificates');
         }
@@ -230,9 +228,7 @@ class CertificateGenerator {
     }
 
     private function generate_certificate_images($student_data, $certificate_id) {
-        // Primera página del certificado
         $image1 = $this->create_first_page($student_data, $certificate_id);
-        // Segunda página del certificado
         $image2 = $this->create_second_page($student_data);
         
         $paths = [
@@ -300,8 +296,6 @@ class CertificateGenerator {
     private function create_second_page($student_data) {
         $image = imagecreatefrompng($this->config['templates_path'] . '/Diapositiva2.png');
         
-        // Similar al create_first_page pero con la configuración de la segunda página
-        // ... código para la segunda página ...
         
         return $image;
     }
